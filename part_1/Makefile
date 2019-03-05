@@ -5,14 +5,18 @@
 # Assignment 2, Part 1: Driving Route Finder
 
 CC = g++
-LFLAGS = -c -Wall -O2 -std=c++11
-CFLAGS =
-OBJS =
-PROGS =
+LFLAGS = 
+CFLAGS = -c -Wall -O2 -std=c++11
+OBJS = server.o
+PROGS = server
 
 # executable targets
+server: server.o
+	$(CC) server.o -o server $(LFLAGS)
 
 # object targets
+server.o: server.cpp server.h
+	$(CC) server.cpp -o server.o $(CFLAGS)
 
 # clean
 clean:
