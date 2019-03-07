@@ -34,9 +34,8 @@ class RouteServer {
 public:
     RouteServer() = default;
 
-    RouteServer(const string& read_file) : filename(read_file) {}
-
-    void readGraph();
+    // constructs graph of map data from CSV file
+    void readGraph(string filename, WDigraph& graph, coordinates& points);
 
     // identifies substring ranges for parsing
     vector<int> findCharPositions(const char& sub, const string& s);
@@ -45,9 +44,6 @@ public:
     long long manhatten(const Point& pt1, const Point& pt2);
 
 private:
-    const string filename;
-    WDigraph graph;
-    coordinates points;
 };
 
 vector<int> RouteServer::findCharPositions(const char& sub, const string& s) {
@@ -62,7 +58,7 @@ long long RouteServer::manhatten(const Point& pt1, const Point& pt2) {
     return std::abs(pt1.lat - pt2.lat) + std::abs(pt1.lon - pt2.lon);
 }
 
-void RouteServer::readGraph() {
+void RouteServer::readGraph(string filename, WDigraph& graph, coordinates& points) {
     // read mode
     ifstream file;
     file.open(filename);
