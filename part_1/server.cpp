@@ -135,9 +135,9 @@ void RouteServer::readGraph(std::string filename, WDigraph& graph, coordinates& 
                                             sep_positions[1]-sep_positions[0]));
             graph.addVertex(vertex_id);
             // lat and lon substring
-            double lat_raw = stod(line.substr(sep_positions[1]+1, 
+            long double lat_raw = stold(line.substr(sep_positions[1]+1, 
                                             sep_positions[2]-sep_positions[1]));
-            double lon_raw = stod(line.substr(sep_positions[2]+1, line.size()));
+            long double lon_raw = stold(line.substr(sep_positions[2]+1, line.size()));
             long long lat = static_cast<long long> (lat_raw*100000);
             long long lon = static_cast<long long> (lon_raw*100000);
             points[vertex_id] = Point(lat, lon);
