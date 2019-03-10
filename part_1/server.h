@@ -7,9 +7,6 @@
 #ifndef SERVER_H
 #define SERVER_h
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -18,6 +15,12 @@
 
 const char vertex_flag = 'V';
 const char edge_flag = 'E';
+const char request_flag = 'R';
+const char ack_flag = 'A';
+const char waypoint_flag = 'W';
+const char path_flag = 'N';
+const char end_flag = 'E';
+const std::string response_no_path = "N 0\n";
 
 struct Point {
     Point() = default;
@@ -43,57 +46,18 @@ public:
     // computes manhatten distance between two points
     long long manhatten(const Point& pt1, const Point& pt2);
 
+    // gets routing request from stdin
+    void getRequest(coordinates points, int& start_vertex_id, int& end_vertex_id);
+
+    // finds the closest map vertices based on manhatten distance
+    int findClosest(coordinates points, Point& location);
+
+    void findPath(std::list<int>& path, std::unordered_map<int, PLI> search_tree, 
+                    int start_vertex_id, int end_vertex_id);
+    
+    void waypoints(std::list<int>& path, coordinates& points);
+
 private:
 };
-
-vector<int> RouteServer::findCharPositions(const char& sub, const string& s) {
-    vector<int> positions;
-    for (std::size_t i = 0; i < s.size()-1; ++i) {
-        if (s[i] == sub) positions.push_back(i);
-    }
-    return positions;
-}
-
-long long RouteServer::manhatten(const Point& pt1, const Point& pt2) {
-    return std::abs(pt1.lat - pt2.lat) + std::abs(pt1.lon - pt2.lon);
-}
-
-void RouteServer::readGraph(string filename, WDigraph& graph, coordinates& points) {
-    // read mode
-    ifstream file;
-    file.open(filename);
-    string line;
-
-    // process all lines in the file
-    while (getline(file, line)) {
-        if (line[0] == vertex_flag) {
-            // find separator positions within the line
-            vector<int> sep_positions = findCharPositions(',', line);
-            // ID substring
-            int vertex_id = stoi(line.substr(sep_positions[0]+1,
-                                            sep_positions[1]-sep_positions[0]));
-            graph.addVertex(vertex_id);
-            // lat and lon substring
-            float lat_raw = stof(line.substr(sep_positions[1]+1, 
-                                            sep_positions[2]-sep_positions[1]));
-            float lon_raw = stof(line.substr(sep_positions[2]+1, line.size()));
-            long long lat = static_cast<long long> (lat_raw*100000);
-            long long lon = static_cast<long long> (lon_raw*100000);
-            points[vertex_id] = Point(lat, lon);
-        }
-        else if (line[0] == edge_flag) {
-            // find separator positions within the line
-            vector<int> sep_positions = findCharPositions(',', line);
-            // vertex substrings
-            int vertex1 = stoi(line.substr(sep_positions[0]+1,
-                                            sep_positions[1]-sep_positions[0]));
-            int vertex2 = stoi(line.substr(sep_positions[1]+1,
-                                            sep_positions[2]-sep_positions[1]));
-            graph.addEdge(vertex1, vertex2, manhatten(points[vertex1], points[vertex2]));
-
-            return;
-        }
-    }
-}
 
 #endif
