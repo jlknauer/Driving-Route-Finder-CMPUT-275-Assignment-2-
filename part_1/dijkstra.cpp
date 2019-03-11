@@ -10,6 +10,7 @@
 #include "dijkstra.h"
 #include "digraph.h"
 #include "wdigraph.h"
+#include "heap.h"
 
 #include <iostream>
 
@@ -21,24 +22,17 @@
 // returns:
 //      none
 void dijkstra(const WDigraph& graph, int startVertex, std::unordered_map<int, PLI>& tree) {
-    std::list<PIPLI> events;
+    BinaryHeap<int,PLI> events;
     // at the beginning of the search, a vertex with ID == -1 indicates there is no predecessor
     // the non-existent predecessor is assigned a cost of 0
-    events.push_back(PIPLI(startVertex, PLI(0,-1)));
+    events.insert(startVertex, PLI(0,-1));
 
-    while (!events.empty()) {
-        // find a search that reaches its endpoint the earliest
-        auto next_event = events.begin();
-        for (auto i = events.begin(); i != events.end(); ++i) {
-            if (i->second.first < next_event->second.first) {
-                next_event = i;
-            }
-        }
-        int vertex = next_event->first;
-        int predecessor = next_event->second.second;
-        long long cost = next_event->second.first;
-
-        events.erase(next_event);
+    while (events.size()>0) {
+        // minimum
+        int vertex = events.min().first;
+        int predecessor = events.min().second.second;
+        long long cost = events.min().second.first;
+        events.popMin();
         // if the predecssor is already in the search tree, it has already been reached by an
         // earlier search; do nothing
         if (tree.find(vertex) != tree.end()) {
@@ -54,7 +48,7 @@ void dijkstra(const WDigraph& graph, int startVertex, std::unordered_map<int, PL
             // the search begins at the vertex with the current cost
             // it will reach the neighbour totalling the current cost plus the edge distance
             int neighbour_cost = cost + graph.getCost(vertex, neighbour);
-            events.push_back(PIPLI(neighbour, PLI(neighbour_cost, vertex)));
+            events.insert(neighbour, PLI(neighbour_cost, vertex));
         }
     }
 }

@@ -52,7 +52,7 @@ void BinaryHeap<T,K>::insert(const T& item, const K& key){
     v --;
     int parent= (v-1)/2;
     // fix by swapping content of vertices;
-    // repeat process until getting ot the root or until achieving order
+    // repeat process until getting to the root or until achieving order
     while(v>0 && heap[v].first < heap[parent].first){
         // swap with parent
         pair<T,K> aux = heap[v];
@@ -79,8 +79,8 @@ void BinaryHeap<T,K>::popMin(){
         int v = 0;
         int right =2*v + 2;
         int left =2*v + 1;
-        // while heap property is violated
-        while(heap[right].first > heap[v].first or heap[left].first > heap[v].first){
+        // while heap property is violated, children are smaller than parent
+        while(heap[right].first < heap[v].first or heap[left].first < heap[v].first){
             // create auxiliary vertex
             pair<T,K> aux = heap[v];
             // if left is the smallest
