@@ -9,6 +9,7 @@
 
 #include <utility>
 #include <vector>
+#include <math.h> // for the floor function
 
 template <class T, class K>
 class BinaryHeap {
@@ -32,5 +33,96 @@ private:
     // the array holding the heap
     std::vector< std::pair<T,K> > heap;
 };
+
+// Returns min element in heap by accessing the first
+// element in the vector
+template <class T, class K>
+std::pair<T, K> BinaryHeap<T,K>::min() const{
+    return heap.front();
+}
+
+template <class T, class K>
+void BinaryHeap<T,K>::insert(const T& item, const K& key){
+    // put it at the end
+    heap.push_back(make_pair(item,key));
+    // position of vertex
+    int v = heap.size();
+    v --;
+    parent= floor((v-1)/2);
+    // fix by swapping content of vertices;
+    // repeat process until getting ot the root or until achieving order
+    while(v>0 && heap[v].second < heap[parent].second){
+        // swap with parent
+        pair<T,K> aux = heap[v];
+        heap[v]=heap[parent];
+        heap[parent]= aux;
+        // move up the tree
+        v = parent;
+        parent= floor((v-1)/2);
+    }
+}
+
+// remove the top and fix tree
+// based on pseudocode on the slides
+template <class T, class K>
+void BinaryHeap<T,K>::popMin(){
+    // assign the root the last vertex
+    heap.front()=heap.back()
+    // remove the last vertex
+    heap.pop_back();
+    int s = heap.size();
+    // make sure heap is not empty
+    if (s<0){
+        // current vertex position
+        int v = 0;
+        int right =2*v + 2;
+        int left =2*v + 1;
+        // while heap property is violated
+        while(heap[right].second < heap[v].second or heap[left].second < heap[v].second){
+            // create auxiliary vertex
+            pair<T,K> aux = heap[v];
+            // if left is the smallest
+            if(heap[right]>heap[left]){
+                //swap with left
+                heap[v]= heap[left];
+                heap[left]= aux;
+                // reassign v
+                v = left;
+            }
+            // if right is the smallest
+            else{
+                // swap with right
+                heap[v]= heap[right];
+                heap[right]= aux;
+                // reassign v
+                v = right;
+            }
+            // recompute right and left
+            right =2*v + 2;
+            left =2*v + 1;
+            // make sure we are not out of bounds
+            if (right > size-1){
+                // no children
+                if (left >size-1){
+                    // no more possible swaps
+                    // heap is ordered
+                    return;
+                }
+                // one child
+                else{
+                    // go over the loop once more
+                    right = left;
+                }
+
+            }
+        }
+    }
+}
+
+// simply returns the size of the vector
+template <class T, class K>
+int BinaryHeap<T,K>::size() const{
+    return heap.size();
+}
 
 #endif
