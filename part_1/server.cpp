@@ -39,41 +39,72 @@ int main() {
     return 0;
 }
 
+// returns a waypoint from the path when client request is received
+// args:
+//      path: ordered vertices from start vertex to end vertex
+//      points: container for Point data structures containing vertex lat/lon
+// returns:
+//      none
 void RouteServer::waypoints(std::list<int>& path, coordinates& points) {
     for (auto i = path.begin(); i != path.end(); ++i) {
         char input_flag;
         std::cin >> input_flag;
+        // check for correct client request
+        // output format: W lat lon
         if (input_flag == ack_flag) {
             std::cout << waypoint_flag << ' '
                         << points[*i].lat << ' '
                         << points[*i].lon << std::endl;
         }
     }
+    // terminate path upon recieving a client request after path is fully iterated through
     char final_flag;
     std::cin >> final_flag;
-    std::cout << end_flag << '\n';
+    if (final_flag = ack_flag) {
+        std::cout << end_flag << '\n';
+    }
     return;
 }
 
+// constructs a path from the start vertex to the end vertex based on the search tree for the 
+// start vertex
+// args:
+//      path: container for ordered vertices from start vertex to end vertex
+//      search_tree: search tree constructed with dijkstras in respect to start vertex
+//      start_vertex_id: start vertex
+//      end_vertex_id: end vertex
+// returns:
+//      none
 void RouteServer::findPath(std::list<int>& path, std::unordered_map<int, PLI> search_tree, 
                             int start_vertex_id, int end_vertex_id) {
+    // check if a path from the start to end vertex exists
     if (search_tree.find(end_vertex_id) == search_tree.end()) {
+        // respond with no path found and terminate process
         std::cout << response_no_path;
         return;
     }
     else {
+        // construct path from end vertex to the start vertex
         int stepping = end_vertex_id;
         while (stepping != start_vertex_id) {
             path.push_front(stepping);
             stepping = search_tree[stepping].second;
         }
         path.push_front(start_vertex_id);
+        // respond to client with length of the path
         std::cout << path_flag << ' ' << path.size() << '\n';
     }
     return;
 }
 
-void RouteServer::getRequest(coordinates points, int& start_vertex_id, int& end_vertex_id) {
+// reads in request from the client and locates the closest start and end vertex respectively
+// args:
+//      points: container for Point data structures containing vertex lat/lon
+//      start_vertex_id: start vertex
+//      end_vertex_id: end vertex
+// returns:
+//      none
+void RouteServer::getRequest(coordinates& points, int& start_vertex_id, int& end_vertex_id) {
     // valid request is in the format: R start_lat start_lon end_lat end_lon
     char input_flag;
     std::cin >> input_flag;
@@ -87,7 +118,13 @@ void RouteServer::getRequest(coordinates points, int& start_vertex_id, int& end_
     }
 }
 
-int RouteServer::findClosest(coordinates points, Point& location) {
+// locates the closest vertex for given map coordinates
+// args:
+//      points: container for Point data structures containing vertex lat/lon
+//      location: given map coordinates
+// returns:
+//      none
+int RouteServer::findClosest(coordinates& points, Point& location) {
     // current closest vertex with its associated manhatten distance
     std::pair<int, long long> closest_vertex;
     bool search_flag = true;
@@ -107,6 +144,12 @@ int RouteServer::findClosest(coordinates points, Point& location) {
     return closest_vertex.first;
 }
 
+// helper function for parsing based on the position of separators for CSV file
+// args:
+//      sub: sepearator character
+//      s: string to search
+// returns:
+//      positions: container with the ordered positions of the separators in the given string
 std::vector<int> RouteServer::findCharPositions(const char& sub, const string& s) {
     std::vector<int> positions;
     for (std::size_t i = 0; i < s.size()-1; ++i) {
@@ -115,10 +158,23 @@ std::vector<int> RouteServer::findCharPositions(const char& sub, const string& s
     return positions;
 }
 
+// computes manhatten distance between two sets of coordinates
+// args:
+//      pt1: first point
+//      pt2: second point
+// returns:
+//      (long long): manhatten distance
 long long RouteServer::manhatten(const Point& pt1, const Point& pt2) {
     return std::abs(pt1.lat - pt2.lat) + std::abs(pt1.lon - pt2.lon);
 }
 
+// constructs graph based on vertex and edge data read from CSV file
+// args:
+//      filename: name of the CSV file
+//      graph: instantiated WDigraph class
+//      points: container for the coordinate pairs of the verticies
+// returns:
+//      none
 void RouteServer::readGraph(std::string filename, WDigraph& graph, coordinates& points) {
     // read mode
     std::ifstream file;

@@ -47,10 +47,10 @@ public:
     long long manhatten(const Point& pt1, const Point& pt2);
 
     // gets routing request from stdin
-    void getRequest(coordinates points, int& start_vertex_id, int& end_vertex_id);
+    void getRequest(coordinates& points, int& start_vertex_id, int& end_vertex_id);
 
     // finds the closest map vertices based on manhatten distance
-    int findClosest(coordinates points, Point& location);
+    int findClosest(coordinates& points, Point& location);
 
     void findPath(std::list<int>& path, std::unordered_map<int, PLI> search_tree, 
                     int start_vertex_id, int end_vertex_id);
