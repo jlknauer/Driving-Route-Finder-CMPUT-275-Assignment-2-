@@ -22,5 +22,9 @@ Assignment 2, Part 1: Driving Route Finder
     None
 
 4. Running Instructions
+    
+    On the terminal, go to the directory where the files are located. Type "make" and press enter. The program will compile and an executable file will be created. Place the input file you want you use in the same directory. Type "./server <inputname.txt> outputname.txt", replace inputname with the name of the file you want to use as input. Replace outputname with the name you want your output file to be called. Press enter, the program will analyze the input and output the waypoints of the fasest route based on the given input.
 
 5. Notes and Assumptions
+
+    The user will always input a correct file.
