@@ -9,7 +9,6 @@
 
 #include <utility>
 #include <vector>
-#include <math.h> // for the floor function
 
 template <class T, class K>
 class BinaryHeap {
@@ -41,6 +40,9 @@ std::pair<T, K> BinaryHeap<T,K>::min() const{
     return heap.front();
 }
 
+// inserts and recomputes the tree so that it is correct
+// Args: item: first element of the pair to insert
+//       key: second element of the pair to insert
 template <class T, class K>
 void BinaryHeap<T,K>::insert(const T& item, const K& key){
     // put it at the end
@@ -48,17 +50,17 @@ void BinaryHeap<T,K>::insert(const T& item, const K& key){
     // position of vertex
     int v = heap.size();
     v --;
-    int parent= floor((v-1)/2);
+    int parent= (v-1)/2;
     // fix by swapping content of vertices;
     // repeat process until getting ot the root or until achieving order
-    while(v>0 && heap[v].second < heap[parent].second){
+    while(v>0 && heap[v].first < heap[parent].first){
         // swap with parent
         pair<T,K> aux = heap[v];
         heap[v]=heap[parent];
         heap[parent]= aux;
         // move up the tree
         v = parent;
-        parent= floor((v-1)/2);
+        parent= (v-1)/2;
     }
 }
 
@@ -72,17 +74,17 @@ void BinaryHeap<T,K>::popMin(){
     heap.pop_back();
     int s = heap.size();
     // make sure heap is not empty
-    if (s<0){
+    if (s>0){
         // current vertex position
         int v = 0;
         int right =2*v + 2;
         int left =2*v + 1;
         // while heap property is violated
-        while(heap[right].second < heap[v].second or heap[left].second < heap[v].second){
+        while(heap[right].first > heap[v].first or heap[left].first > heap[v].first){
             // create auxiliary vertex
             pair<T,K> aux = heap[v];
             // if left is the smallest
-            if(heap[right]>heap[left]){
+            if(heap[right].first>heap[left].first){
                 //swap with left
                 heap[v]= heap[left];
                 heap[left]= aux;
@@ -101,9 +103,9 @@ void BinaryHeap<T,K>::popMin(){
             right =2*v + 2;
             left =2*v + 1;
             // make sure we are not out of bounds
-            if (right > size-1){
+            if (right > s-1){
                 // no children
-                if (left >size-1){
+                if (left >s-1){
                     // no more possible swaps
                     // heap is ordered
                     return;
