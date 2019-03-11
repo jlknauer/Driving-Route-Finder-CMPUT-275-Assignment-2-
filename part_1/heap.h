@@ -48,7 +48,7 @@ void BinaryHeap<T,K>::insert(const T& item, const K& key){
     // position of vertex
     int v = heap.size();
     v --;
-    parent= floor((v-1)/2);
+    int parent= floor((v-1)/2);
     // fix by swapping content of vertices;
     // repeat process until getting ot the root or until achieving order
     while(v>0 && heap[v].second < heap[parent].second){
@@ -67,7 +67,7 @@ void BinaryHeap<T,K>::insert(const T& item, const K& key){
 template <class T, class K>
 void BinaryHeap<T,K>::popMin(){
     // assign the root the last vertex
-    heap.front()=heap.back()
+    heap.front()=heap.back();
     // remove the last vertex
     heap.pop_back();
     int s = heap.size();
