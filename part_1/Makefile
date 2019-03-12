@@ -1,5 +1,5 @@
 # Names: Jarrett Knauer, Rafaella Grana
-# Student ID: 
+# Student ID:
 # CMPUT 275, WINTER 2019
 #
 # Assignment 2, Part 1: Driving Route Finder
@@ -21,7 +21,7 @@ server.o: server.cpp server.h digraph.h wdigraph.h
 digraph.o: digraph.cpp digraph.h wdigraph.h
 	$(CC) digraph.cpp -o digraph.o $(CFLAGS)
 
-dijkstra.o: dijkstra.cpp digraph.h wdigraph.h
+dijkstra.o: dijkstra.cpp digraph.h wdigraph.h heap.h
 	$(CC) dijkstra.cpp -o dijkstra.o $(CFLAGS)
 
 # clean

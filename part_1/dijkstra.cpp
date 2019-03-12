@@ -29,7 +29,6 @@ void dijkstra(const WDigraph& graph, int startVertex, std::unordered_map<int, PL
         int vertex = events.min().first.second;
         int predecessor = events.min().first.first;
         long long cost = events.min().second;
-
         events.popMin();
 
         // if the min key is already in the search tree, do nothing

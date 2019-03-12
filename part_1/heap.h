@@ -24,7 +24,6 @@ public:
 
     // pop the minimum item from the heap
     void popMin();
-    void popMin1();
 
     // return the number of items held in the heap
     int size() const;
@@ -69,6 +68,7 @@ void BinaryHeap<T,K>::insert(const T& item, const K& key){
 // min heap property
 template <class T, class K>
 void BinaryHeap<T,K>::popMin() {
+    // std::cout << "here\n";
     heap.front() = heap.back();
     heap.pop_back();
     if (heap.size() == 0) return;
@@ -77,13 +77,15 @@ void BinaryHeap<T,K>::popMin() {
     int v = 0;
     int left = 2*v +1;
     int right = 2*v + 2;
+    int size = heap.size();
 
-    while ((left < heap.size() && heap[left].second < heap[v].second) ||
-            (right < heap.size() && heap[right].second < heap[v].second)) {
+    // check children indices before invariant for index errors
+    while ((left < size && heap[left].second < heap[v].second) ||
+            (right < size && heap[right].second < heap[v].second)) {
         // temp tree node for swapping
         pair<T,K> temp = heap[v];
         // both left and right children exist
-        if (left < heap.size() && right < heap.size()) {
+        if (left < size && right < size) {
             // left child is smaller of the two
             if (heap[left].second < heap[right].second) {
                 heap[v] = heap[left];
@@ -98,13 +100,13 @@ void BinaryHeap<T,K>::popMin() {
             }
         }
         // only left child exists
-        else if (left < heap.size() && right >= heap.size()) {
+        else if (left < size && right >= size) {
             heap[v] = heap[left];
             heap[left] = temp;
             v = left;
         }
         // only right child exists
-        else if (left >= heap.size() && right < heap.size()) {
+        else if (left >= size && right < size) {
             heap[v] = heap[right];
             heap[right] = temp;
             v = right;
@@ -112,6 +114,7 @@ void BinaryHeap<T,K>::popMin() {
         // recompute left/right
         left = 2*v + 1;
         right = 2*v + 2;
+        size = heap.size();
     }
 }
 

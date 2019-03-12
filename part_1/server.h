@@ -1,6 +1,6 @@
 // Names: Jarrett Knauer, Rafaella Grana
 // Student ID:
-// CMPUT 275, WINTER 2019
+// CMPUT 275, WINTER 20719
 //
 // Assignment 2, Part 1: Driving Route Finder
 
@@ -52,9 +52,11 @@ public:
     // finds the closest map vertices based on manhatten distance
     int findClosest(coordinates& points, Point& location);
 
+    // constructs path from start to end vertex
     void findPath(std::list<int>& path, std::unordered_map<int, PLI> search_tree, 
                     int start_vertex_id, int end_vertex_id);
     
+    // sends waypoints to client
     void waypoints(std::list<int>& path, coordinates& points);
 
 private:

@@ -8,9 +8,12 @@ Assignment 2, Part 1: Driving Route Finder
 
     * dijkstra.cpp
     * server.cpp
+    * digraph.cpp
     * dijkstra.h
     * heap.h
     * server.h
+    * digraph.h
+    * wdigraph.h
     * Makefile
 
 2. Accessories
@@ -22,9 +25,27 @@ Assignment 2, Part 1: Driving Route Finder
     None
 
 4. Running Instructions
-    
-    On the terminal, go to the directory where the files are located. Type "make" and press enter. The program will compile and an executable file will be created. Place the input file you want you use in the same directory. Type "./server <inputname.txt> outputname.txt", replace inputname with the name of the file you want to use as input. Replace outputname with the name you want your output file to be called. Press enter, the program will analyze the input and output the waypoints of the fasest route based on the given input.
+
+    In the directory containing the included files, in addition to the digraph implementation and header files (digraph.cpp, digraph.h, wdigraph.h), enter the following command into the bash terminal to build the program:
+
+        make
+
+    After the program is finished compiling and linking, enter the following command into the bash terminal to run the program:
+
+        ./server
+
+    To make a query for the route finder, enter the query in the following format in the bash terminal:
+
+        R <start_lat> <start_lon> <end_lat> <end>lon>
+
+    replaceing each term enclosed in <> braces with an integer value of the latitude and longitude in 100,000ths of a degree. The program will respond with the number of waypoints in the shortest path from the start coordinates to the end coordinates. To print individual waypoints, enter the following command in the bash terminal:
+
+        A
+
+    Continue entering the command to get additional waypoints. Once all waypoints are exhausted (and the end coordinates reached), the program will return 'E' and exit.
 
 5. Notes and Assumptions
 
     The user will always input a correct file.
+
+    CMPUT 275 headers were excluded from the digraph.cpp, digraph.h, and wdigraph.h files, as they were provided by the course instructors (and were not modified in any way).
