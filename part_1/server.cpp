@@ -60,7 +60,7 @@ void RouteServer::waypoints(std::list<int>& path, coordinates& points) {
     // terminate path upon recieving a client request after path is fully iterated through
     char final_flag;
     std::cin >> final_flag;
-    if (final_flag = ack_flag) {
+    if (final_flag == ack_flag) {
         std::cout << end_flag << '\n';
     }
     return;
