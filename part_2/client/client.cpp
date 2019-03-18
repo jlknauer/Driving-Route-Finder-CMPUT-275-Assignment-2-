@@ -163,12 +163,6 @@ int main() {
         // 7) server mode switches to listening for client request
 
         desktopCommunication(shared, start, end);
-        for (int i = 0; i < shared.num_waypoints; ++i) {
-          Serial.print(shared.waypoints[i].lat);
-          Serial.print(' ');
-          Serial.print(shared.waypoints[i].lon);
-          Serial.print('\n');
-        }
 
         // send routing request to the server
         // format: R start_lat start_lon end_lat end_lon<\n> (newline terminated)
