@@ -6,15 +6,66 @@ Assignment 2, Part 2: Driving Route Finder
 
 1. Included Files
 
-    * Makefile
+    /server:
+        * digraph.cpp
+        * dijkstra.cpp
+        * serialport.cpp
+        * server.cpp
+        * digraph.h
+        * wdigraph.h
+        * dijkstra.h
+        * heap.h
+        * serialport.h
+        * server.h
+        * Makefile
+    
+    /client:
+        * client.cpp
+        * communication.cpp
+        * lcd_image.cpp
+        * map_drawing.cpp
+        * communication.h
+        * consts_and_types.h
+        * lcd_image.h
+        * map_drawing.h
+        * Makefile
 
 2. Accessories
 
-    None
+    * Arduino MEGA Board (AMG)
+    * Adafruit TFT Display
+    * A-B Style USB Cable
+    * Arduino Input Buttons (x2)
+    * Joystick
 
 3. Wiring Instructions
 
-    None
+    Display Wiring:
+
+        Display Pin         Arduino MEGA Pin
+        1 GND               BB GND bus
+        2 Vin               BB Vcc (positive) bus
+        4 CLK               Pin 52
+        5 MISO              Pin 50
+        6 MOSI              Pin 51
+        7 CS                Pin 10
+        8 D/C               Pin 9
+        19 CCS              Pin 6
+
+    Button Wiring:
+
+        Button              Arduino MEGA Pin
+        Zoom In             Pin 2
+        Zoom Out            Pin 3
+
+    Joystick Wiring:
+
+        Joystick Pin        Arduino MEGA Pin
+        +5V                 BB Vcc (positive) bus
+        GND                 BB GND bus
+        VRx                 Analog 1
+        VRy                 Analog 0
+        SW                  Pin 8
 
 4. Running Instructions
 
@@ -22,4 +73,10 @@ Assignment 2, Part 2: Driving Route Finder
 
 5. Notes and Assumptions
 
-    None
+    i. Modified code: client.cpp
+
+    client.cpp was modified to complete the server-client communications and the route display subroutine in the following areas:
+
+    client.cpp::line 165 is a function call interfacing to the server-client communications subroutine
+
+    client.cpp::line 179 is an added state change to re-draw the map following a completed client request
