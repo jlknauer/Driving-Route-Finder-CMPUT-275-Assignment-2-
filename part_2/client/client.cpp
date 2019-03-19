@@ -11,6 +11,10 @@
 #include "consts_and_types.h"
 #include "map_drawing.h"
 
+// very simple finite state machine:
+  // which endpoint are we waiting for?
+// made this global so any func can access
+enum {WAIT_FOR_START, WAIT_FOR_STOP} curr_mode = WAIT_FOR_START;
 // the variables to be shared across the project, they are declared here!
 shared_vars shared;
 
@@ -98,23 +102,40 @@ void process_input() {
   }
 }
 
+// draws route
 void draw_route(){
-  if(shared.num_waypoints){
+  status_message("lets draw this bitch");
+  delay(1000);
+  if(shared.num_waypoints>0){
     // go thru all but the last index of waypoints
     for(int i=0;i<shared.num_waypoints-1;i++){
-      int16_t x0,y0,x1,y1;
+      int32_t x0,y0,x1,y1;
       // calculate equivalence for x and y
       x0 = longitude_to_x(shared.map_number,shared.waypoints[i].lon);
       x1 = longitude_to_x(shared.map_number,shared.waypoints[i+1].lon);
       y0 = latitude_to_y(shared.map_number,shared.waypoints[i].lat);
       y1 = latitude_to_y(shared.map_number,shared.waypoints[i+1].lat);
-      shared.tft->drawLine(x0,y0,x1,y1,ILI9341_BLUE);
+      x0 = x0-shared.map_coords.x;
+      x1 = x1-shared.map_coords.x;
+      y0 = y0-shared.map_coords.y;
+      y1 = y1-shared.map_coords.y;
+      bool outside0 = (x0 < 0 or x0 > 320) and (y0 < 0 or y0 > 240);
+      bool outside1 = (x1 < 0 or x1 > 320) and (y1 < 0 or y1 > 240);
+      if(not outside0 and not outside1){
+        shared.tft->drawLine(x0,y0,x1,y1,ILI9341_BLUE);
+      }
+      
     }
   }
   else{
     // do not draw the waypoints if there arent any
     status_message("NO PATH");
-    delay(1000);
+    delay(2000);
+  }
+  if (curr_mode == WAIT_FOR_STOP){
+    status_message("TO?");
+  }
+  else{
     status_message("FROM?");
   }
 }
@@ -124,8 +145,6 @@ int main() {
 
   // very simple finite state machine:
   // which endpoint are we waiting for?
-  enum {WAIT_FOR_START, WAIT_FOR_STOP} curr_mode = WAIT_FOR_START;
-
   // the two points that are clicked
   lon_lat_32 start, end;
 
