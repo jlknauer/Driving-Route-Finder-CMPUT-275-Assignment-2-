@@ -98,6 +98,27 @@ void process_input() {
   }
 }
 
+void draw_route(){
+  if(shared.num_waypoints){
+    // go thru all but the last index of waypoints
+    for(int i=0;i<shared.num_waypoints-1;i++){
+      int16_t x0,y0,x1,y1;
+      // calculate equivalence for x and y
+      x0 = longitude_to_x(shared.map_number,shared.waypoints[i].lon);
+      x1 = longitude_to_x(shared.map_number,shared.waypoints[i+1].lon);
+      y0 = latitude_to_y(shared.map_number,shared.waypoints[i].lat);
+      y1 = latitude_to_y(shared.map_number,shared.waypoints[i+1].lat);
+      shared.tft->drawLine(x0,y0,x1,y1,ILI9341_BLUE);
+    }
+  }
+  else{
+    // do not draw the waypoints if there arent any
+    status_message("NO PATH");
+    delay(1000);
+    status_message("FROM?");
+  }
+}
+
 int main() {
   setup();
 
@@ -194,6 +215,7 @@ int main() {
       draw_cursor();
 
       // TODO: draw the route if there is one
+      draw_route();
       shared.redraw_map = false;
     }
   }
