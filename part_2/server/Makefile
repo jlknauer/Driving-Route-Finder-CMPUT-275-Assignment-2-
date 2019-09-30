@@ -1,5 +1,3 @@
-# Names: Jarrett Knauer, Rafaella Grana
-# Student ID: 1405557
 # CMPUT 275, WINTER 2019
 #
 # Assignment 2, Part 2: Driving Route Finder
